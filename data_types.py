@@ -79,3 +79,4 @@ set       and fronzenset
 dict      and str
 bytearray and bytes
           and range()
+ 
