@@ -17,6 +17,14 @@ def time_it(func):
         return result
     return wrapper
 
+@tiem_it
+def squares():
+	for i in range(1000000):
+		pass # we are not intrested in output, we want to test time_it decorator
+
+squares() # Time took is 0.013 seconds
+
+
 ############## Example2: (Modify function behaviour) ###################
 
 def uppercase(func):
@@ -25,6 +33,13 @@ def uppercase(func):
 		modifying_result = result.upper()
 		return modifying_result
 	return wrapper
+
+@uppercase
+def my_fun():
+    s = "Venky Bollimuntha"
+    return s
+
+print(my_fun()) # VENKY BOLLIMUNTHA
 
 ################### Example 3: (Multiple decorators to single function)######
 
@@ -44,11 +59,22 @@ def my_tag():
 # first para_tag is excecuted, then h1_tag is executed.
 	return "Hello! Venky"
 
+my_tag() # Hello! Venky in paragraph tag
+# Hello! Venky in Header tag
+
 #############  Example 4 (function that accept arguments) ############
 def proxy(func):
 	def wrapper(*args, **kwargs):
-		return func(*args,**kwargs)
+		result = func(*args,**kwargs)
+		return result.upper()
 	return wrapper
+
+@proxy
+def upper(s):
+	return s
+
+print(upper("venky bollimuntha")) # VENKY BOLLIMUNTHA
+
 
 ############   Example 5 (using import functool.wraps) (Recommended) #########
 """
