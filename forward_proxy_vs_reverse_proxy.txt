@@ -1,0 +1,36 @@
+Forward proxy vs Reverse Proxy:
+-------------------------------
+
+Forward proxy:
+-------------
+
+it's actually on the client side, all the client requests are go to proxy server and then to internet.
+
+In this way server doesn't know the actual client IP address, it(server) knows only the proxy server address
+
+Forward proxies are typically used internally by large organizations, such as universities and enterprises
+	1. Block employees from visiting certain websites
+	2. Monitor employee online activity
+	3. Improve the user experience by caching external site content
+
+Eg: VPN
+
+
+Reverse Proxy:(Load balancer)
+--------------
+
+It's actually located on the server side, just before the servers, it distributes the incoming requests to all the servers and return response to client side.
+
+Connecting with the origin server and forwarding the original request
+Completing a TCP three-way handshake, terminating the initial connection
+
+
+eg. load balancer
+
+
+Reverse proxy software for HTTP
+1. Apache
+2. nginx
+3. lighthttpd
+
+
