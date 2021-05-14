@@ -1,0 +1,117 @@
+Python threads can’t run in parallel on multiple CPU cores because of the global interpreter lock (GIL)
+
+
+Python MultiThreadhing:
+-----------------------
+
+1. thread (deprecated, used in python2)
+2. threading
+
+
+So, when writing a multithreaded app, you will do the following:
+
+		1. define a class which extends the Thread class
+		2. Override the __init__ constructor
+		3. Override the run() method
+
+
+import time
+import threading
+
+class threadtester (threading.Thread):
+    def __init__(self, id, name, i):
+       threading.Thread.__init__(self)
+       self.id = id
+       self.name = name
+       self.i = i
+       
+    def run(self):
+       thread_test(self.name, self.i, 5)
+       print ("%s has finished execution " %self.name)
+
+def thread_test(name, wait, i):
+
+    while i:
+       time.sleep(wait)
+       print ("Running %s \n" %name)
+       i = i - 1
+
+if __name__=="__main__":
+    thread1 = threadtester(1, "First Thread", 1)
+    thread2 = threadtester(2, "Second Thread", 2)
+    thread3 = threadtester(3, "Third Thread", 3)
+
+    thread1.start()
+    thread2.start()
+    thread3.start()
+
+    thread1.join()
+    thread2.join()
+    thread3.join()
+
+
+DeadLock:
+--------
+a deadlock occurs when different threads or processes (philosophers) try to acquire the shared system resources (forks) at the same time. As a result, none of the processes get a chance to execute as they are waiting for another resource held by some other process.
+
+RaceConditions:
+---------------
+
+i=0; # a global variable
+for x in range(100):
+    print(i)
+    i+=1;
+
+
+If you create n number of threads which run this code at once, you cannot determine the value of i (which is shared by the threads) when the program finishes execution.
+
+This is because in a real multithreading environment, the threads can overlap, and the value of i which was retrieved and modified by a thread can change in between when some other thread accesses it.
+
+Synchronizing Threads:
+---------------------
+
+To deal with the race conditions and deadlocks, and other thread-based issues thre threading module provides the Lock object.
+
+The idea is that when a thread wants access to a specific resource, it acquires a lock for that resource. Once a thread locks a particular resource, no other thread can access it until the lock is released.As a result, the changes to the resource will be atomic, and race conditions will be averted.
+
+Atomic:
+------
+
+atomic operations are indivisible. Atomic operations are critically important when dealing with shared resources
+
+
+GlobalInterpreterLock:
+----------------------
+Before getting into the details of the python GIL;
+
+1. CPU-bound code: Any piece of code which will be directly executed by the CPU
+2. I/O bound code: Any piece of code that accesses the file system throu the file system
+
+
+GIL:
+----
+It makes sure that one thread can access a particular resource at a time
+
+Due to this, only one thread can access the interpreter at any time, meaning that there will be only one thread executing python code at a given point of time.
+
+
+Why was GIL needed:
+------------------
+
+Cpython garbase collector uses an efficient memory management technique known as garbage collector.
+
+Here is how it works:
+--------------------
+Every object in python has a reference count, which is increased when it is assigned to a new variable name or added to a container.
+
+Likewise, the reference count is decreased when the reference goes out of scope or when the del statement called. When the reference count of an object reaches 0, it is garbage collected, and the alloted memory is freed.
+
+
+But the problem is that the reference count variable is prone to race condtitions like any other global variable. To solve this problem, the developers of python decided to use the global interpreter lock.
+
+
+
+Therefore, GIL is a significant restriction for multithreaded python programs, running heavy CPU-bound operations(effectively making them single threaded)
+if you want to make use of multiple CPU cores in your application, use the MULTIPROCESSING module instead.
+
+
